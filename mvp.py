@@ -18,7 +18,7 @@ st.set_page_config(
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
     labels = ["Budget", "Time", "Workload"]
-    values = [0.2, 0.3, 0.5]
+    values = [20.0, 35.0 , 45.0]
     pie_df = pd.DataFrame({
     "constraint": labels,
     "value": values
