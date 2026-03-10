@@ -10,6 +10,11 @@ labels = ["Budget", "Time", "Workload"]
 values = [40, 35, 25]
 col1, col2 = st.columns([0.5, 0.5])
 
+st.set_page_config(
+    page_title="Student Eating Habits",
+    layout="wide"
+)
+
 st.title("What Shapes Student Eating Habits?")
 
 with col1:
@@ -27,7 +32,7 @@ with col1:
     )
 
     fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
-    fig.update_layout(showlegend=False, width=300, height=300)
+    fig.update_layout(showlegend=False, autosize=True)
 
     selected = plotly_events(fig, click_event=True)
 
