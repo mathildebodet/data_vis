@@ -70,48 +70,50 @@ import plotly.express as px
 from streamlit_plotly_events import plotly_events
 
 labels = ["Budget", "Time", "Workload"]
-values = [1,2,3]
+values = [40, 35, 25]
+col1, col2 = st.columns([1,2])
 
-st.write("Click on a constraint to explore how it shapes student eating habits.")
+with col1:
+    st.write("Click on a constraint to explore how it shapes student eating habits.")
 
-fig = px.pie(
-    names=labels,
-    values=values,
-    title="What shapes student eating habits?"
-)
+    fig = px.pie(
+        names=labels,
+        values=values,
+    )
 
-fig.update_traces(textinfo="label", textposition="inside")
-fig.update_layout(showlegend=False)
+    fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]))
+    fig.update_layout(showlegend=False)
 
-selected = plotly_events(fig, click_event=True)
+    selected = plotly_events(fig, click_event=True)
 
 
-if selected:
-    index = selected[0]["pointNumber"]
-    choice = labels[index]
-    st.write("You selected:", choice)
+with col2:
+    if selected:
+        index = selected[0]["pointNumber"]
+        choice = labels[index]
+        st.write("You selected:", choice)
 
-if selected:
-    index = selected[0]["pointNumber"]
-    choice = labels[index]
+    if selected:
+        index = selected[0]["pointNumber"]
+        choice = labels[index]
 
-    if choice == "Budget":
-        st.header("Budget and diet")
+        if choice == "Budget":
+            st.header("Budget and diet")
 
-        fig, ax = plt.subplots()
-        df.groupby("income")[["fruit_day","veggies_day"]].mean().plot(kind="bar", ax=ax)
-        st.pyplot(fig)
+            fig, ax = plt.subplots()
+            df.groupby("income")[["fruit_day","veggies_day"]].mean().plot(kind="bar", ax=ax)
+            st.pyplot(fig)
 
-    elif choice == "Time":
-        st.header("Time constraints")
+        elif choice == "Time":
+            st.header("Time constraints")
 
-        fig, ax = plt.subplots()
-        df["cook"].value_counts().plot(kind="bar", ax=ax)
-        st.pyplot(fig)
+            fig, ax = plt.subplots()
+            df["cook"].value_counts().plot(kind="bar", ax=ax)
+            st.pyplot(fig)
 
-    elif choice == "Workload":
-        st.header("Academic stress")
+        elif choice == "Workload":
+            st.header("Academic stress")
 
-        fig, ax = plt.subplots()
-        df["comfort_food_reasons"].value_counts().plot(kind="bar", ax=ax)
-        st.pyplot(fig)
+            fig, ax = plt.subplots()
+            df["comfort_food_reasons"].value_counts().plot(kind="bar", ax=ax)
+            st.pyplot(fig)
