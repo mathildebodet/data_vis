@@ -18,7 +18,7 @@ st.set_page_config(
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
     labels = ["Budget", "Time", "Workload"]
-    values = [40, 35, 25]
+    values = [0.2, 0.3, 0.5]
     pie_df = pd.DataFrame({
     "constraint": labels,
     "value": values
@@ -40,7 +40,7 @@ with col2:
     if selected:
         index = selected[0]["pointNumber"]
         choice = labels[index]
-        st.write("You selected:", choice)
+        st.write("Explore how ", choice, " shapes student eating habits.")
 
     if selected:
         index = selected[0]["pointNumber"]
