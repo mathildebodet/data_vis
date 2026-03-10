@@ -70,7 +70,7 @@ import plotly.express as px
 from streamlit_plotly_events import plotly_events
 
 labels = ["Budget", "Time", "Workload"]
-values = [1,1,1]
+values = [1,2,3]
 
 st.write("Click on a constraint to explore how it shapes student eating habits.")
 
@@ -80,11 +80,11 @@ fig = px.pie(
     title="What shapes student eating habits?"
 )
 
-fig.update_traces(textinfo="label+percent")
+fig.update_traces(textinfo="label", textposition="inside")
+fig.update_layout(showlegend=False)
 
 selected = plotly_events(fig, click_event=True)
 
-st.plotly_chart(fig)
 
 if selected:
     index = selected[0]["pointNumber"]
