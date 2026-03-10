@@ -6,8 +6,7 @@ from streamlit_plotly_events import plotly_events
 
 df = pd.read_csv("food_coded.csv")
 
-labels = ["Budget", "Time", "Workload"]
-values = [40, 35, 25]
+st.title("What Shapes Student Eating Habits?")
 col1, col2 = st.columns([0.5, 0.5])
 
 st.set_page_config(
@@ -15,11 +14,11 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title("What Shapes Student Eating Habits?")
 
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
-
+    labels = ["Budget", "Time", "Workload"]
+    values = [40, 35, 25]
     pie_df = pd.DataFrame({
     "constraint": labels,
     "value": values
