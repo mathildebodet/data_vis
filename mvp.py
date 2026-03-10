@@ -72,22 +72,28 @@ from streamlit_plotly_events import plotly_events
 labels = ["Budget", "Time", "Workload"]
 values = [1,1,1]
 
+st.write("Click on a constraint to explore how it shapes student eating habits.")
+
 fig = px.pie(
     names=labels,
     values=values,
     title="What shapes student eating habits?"
 )
 
+fig.update_traces(textinfo="label+percent")
+
 selected = plotly_events(fig, click_event=True)
 
 st.plotly_chart(fig)
 
 if selected:
-    choice = selected[0]["label"]
+    index = selected[0]["pointNumber"]
+    choice = labels[index]
     st.write("You selected:", choice)
 
 if selected:
-    choice = selected[0]["label"]
+    index = selected[0]["pointNumber"]
+    choice = labels[index]
 
     if choice == "Budget":
         st.header("Budget and diet")
