@@ -18,17 +18,22 @@ st.set_page_config(
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
     labels = ["Budget", "Time", "Workload"]
-    values = [20.0, 35.0 , 45.0]
-    pie_df = pd.DataFrame({
-    "constraint": labels,
-    "value": values
-    })
+    values = [20, 35, 45]  # valeurs proportionnelles
 
+    # dataframe propre, forcer float
+    pie_df = pd.DataFrame({
+        "constraint": labels,
+        "value": values
+    })
+    pie_df["value"] = pie_df["value"].astype(float)
+
+    # pie chart
     fig = px.pie(
-    pie_df,
-    names="constraint",
-    values="value"
+        pie_df,
+        names="constraint",
+        values="value"
     )
+
 
     fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
     fig.update_layout(showlegend=False, autosize=True)
