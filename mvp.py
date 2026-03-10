@@ -8,7 +8,7 @@ df = pd.read_csv("food_coded.csv")
 
 labels = ["Budget", "Time", "Workload"]
 values = [40, 35, 25]
-col1, col2 = st.columns([1,2])
+col1, col2 = st.columns([0.5, 0.5])
 
 st.title("What Shapes Student Eating Habits?")
 
@@ -27,7 +27,7 @@ with col1:
     )
 
     fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
-    fig.update_layout(showlegend=False, width=400, height=400)
+    fig.update_layout(showlegend=False, width=300, height=300)
 
     selected = plotly_events(fig, click_event=True)
 
