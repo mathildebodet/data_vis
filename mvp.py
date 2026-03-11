@@ -201,7 +201,7 @@ with col2:
                 ]
             ).properties(
                 title="Eating Out Frequency by Living Situation",
-                width=400,
+                width=100,
                 height=400
             )
             st.altair_chart(chart_eat_out)
