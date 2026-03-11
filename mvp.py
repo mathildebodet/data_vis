@@ -36,7 +36,7 @@ with col1:
     )
 
 
-    fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip",hoverinfo = "skip" ,hovertemplate = None)
+    fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
     fig.update_layout(showlegend=False, autosize=True)
 
     selected = plotly_events(fig, click_event=True)
