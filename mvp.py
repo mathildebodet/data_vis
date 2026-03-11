@@ -193,7 +193,7 @@ with col2:
                 x=alt.X("Living Situation:N", title="Living Situation", axis=alt.Axis(labelAngle=0)),
                 y=alt.Y("percentage:Q", title="Percentage of students"),
                 color=alt.Color("Eating Out Frequency:N", legend=alt.Legend(title="Eating Out Frequency")),
-                column=alt.Column("Eating Out Frequency:N", title=None, spacing=10),  # optionnel, pour séparer par catégorie
+                column=alt.Column("Eating Out Frequency:N", title=None, spacing=10, width=30),  # optionnel, pour séparer par catégorie
                 tooltip=[
                     alt.Tooltip("Living Situation:N"),
                     alt.Tooltip("Eating Out Frequency:N"),
