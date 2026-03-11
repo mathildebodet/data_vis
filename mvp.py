@@ -58,8 +58,13 @@ with col1:
 
     with col4:
         st.write("")  # espace pour aligner verticalement
-        st.write("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
-        st.image("fourchette.png", width=50)  # ajuster width pour la faire à la même hauteur que le pie
+        st.write("")
+        st.write("")
+        st.write("")
+        st.write("")
+        st.write("")
+        st.write("")
+        st.image("fourchette.png", width=100)  # ajuster width pour la faire à la même hauteur que le pie
 
 
 with col2:
