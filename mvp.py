@@ -18,7 +18,7 @@ st.set_page_config(
 
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
-    col3, col4 = st.columns(2)
+    col3, col4 = st.columns([0.7, 0.3])
     with col3:
         labels = ["Budget", "Time", "Workload"]
         values = [20, 35, 45]  # valeurs proportionnelles
@@ -43,7 +43,7 @@ with col1:
 
         selected = plotly_events(fig, click_event=True)
     with col4:
-        st.image("fourchette.png", use_column_width=True)
+        st.image("fourchette.png", use_column_height=True)
 
 
 with col2:
