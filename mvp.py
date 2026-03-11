@@ -192,7 +192,7 @@ with col2:
             chart_eat_out = alt.Chart(eat_out_dist).mark_bar().encode(
                 x=alt.X("Living Situation:N", title="Living Situation", axis=alt.Axis(labelAngle=0)),
                 y=alt.Y("percentage:Q", title="Percentage of students"),
-                color=alt.Color("Eating Out Frequency:N", legend=alt.Legend(title="Eating Out Frequency")),
+                color=alt.Color("Eating Out Frequency:N", legend=alt.Legend(title="Eating Out Frequency"),scale=alt.Scale(scheme="pastel1")),
                 column=alt.Column("Eating Out Frequency:N", title=None, spacing=10),  # optionnel, pour séparer par catégorie
                 tooltip=[
                     alt.Tooltip("Living Situation:N"),
@@ -201,7 +201,7 @@ with col2:
                 ]
             ).properties(
                 title="Eating Out Frequency by Living Situation",
-                width=30,
+                width=400,
                 height=400
             )
             st.altair_chart(chart_eat_out)
@@ -209,6 +209,38 @@ with col2:
         elif choice == "Workload":
             st.header("Academic stress")
 
-            fig, ax = plt.subplots()
-            df["comfort_food_reasons"].value_counts().plot(kind="bar", ax=ax)
-            st.pyplot(fig)
+            reason_map = {1: "Stress", 2: "Boredom", 3: "Depression/Sadness", 4: "Hunger", 5: "Laziness", 6: "Other", 7: "Other", 8: "Other", 9: "Never eat comfort food"}
+            grade_map = {1: "Freshman", 2: "Sophomore", 3: "Junior", 4: "Senior"}
+
+            df["Reason"] = df["comfort_food_reasons_coded"].map(reason_map)
+            df["Grade Level"] = df["grade_level"].map(grade_map)
+
+            # Filtrer uniquement les raisons pertinentes
+            df_filtered = df.dropna(subset=["Reason"])
+
+            # Calculer les proportions par grade
+            stacked_df = (
+                df_filtered.groupby(["Grade Level", "Reason"])
+                .size()
+                .reset_index(name="count")
+            )
+
+            stacked_df["percentage"] = stacked_df.groupby("Grade Level")["count"].transform(lambda x: x / x.sum() * 100)
+            reason_order = ["Stress", "Boredom", "Depression/Sadness", "Hunger", "Laziness", "Other", "Never eat comfort food"]
+            # Stacked bar chart
+            chart_stack = alt.Chart(stacked_df).mark_bar().encode(
+                x=alt.X("Grade Level:N", title="Grade Level"),
+                y=alt.Y("percentage:Q", title="Percentage of students"),
+                color=alt.Color("Reason:N",sort=reason_order, legend=alt.Legend(title="Reason for Comfort Food"), scale=alt.Scale(scheme="pastel1")),
+                tooltip=[
+                    alt.Tooltip("Grade Level:N"),
+                    alt.Tooltip("Reason:N"),
+                    alt.Tooltip("percentage:Q", format=".1f", title="Percentage")
+                ]
+            ).properties(
+                title="Comfort Food Reasons by Grade Level",
+                width=600,
+                height=400
+            )
+            st.altair_chart(chart_stack, use_container_width=True)
+            st.write("The chart shows that Stress, Boredom, and Depression/Sadness are the predominant reasons why students turn to comfort food. This highlights that emotional responses related to academic workload strongly influence eating habits, and these patterns are consistent across all grade levels.")
