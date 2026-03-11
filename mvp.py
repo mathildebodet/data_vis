@@ -159,7 +159,7 @@ with col2:
             )
 
             st.altair_chart(chart_health, use_container_width=True)
-            st.write("This chart explores whether students with different financial situations perceive their diet differently. Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show that unemployed students report similar or even higher perceptions of healthy eating compared to those with part-time jobs. This suggests that financial constraints may not be the primary factor influencing how students eat.")
+            st.write("Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show that unemployed students report similar or even higher perceptions of healthy eating compared to those with part-time jobs. This suggests that financial constraints may not be the primary factor influencing how students eat.")
             
 
         elif choice == "Time":
@@ -243,4 +243,4 @@ with col2:
                 height=400
             )
             st.altair_chart(chart_stack, use_container_width=True)
-            st.write("The chart shows that Stress, Boredom, and Depression/Sadness are the predominant reasons why students turn to comfort food. This highlights that emotional responses related to academic workload strongly influence eating habits, and these patterns are consistent across all grade levels.")
+            st.write("Stress, Boredom, and Depression/Sadness are the predominant reasons why students turn to comfort food. This highlights that emotional responses related to academic workload strongly influence eating habits, and these patterns are consistent across all grade levels.")
