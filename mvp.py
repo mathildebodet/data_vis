@@ -43,7 +43,7 @@ with col1:
 
         selected = plotly_events(fig, click_event=True)
     with col4:
-        st.image("fourchette.png", use_column_width=True)
+        st.image("fourchette.png", width=50)
 
 
 with col2:
