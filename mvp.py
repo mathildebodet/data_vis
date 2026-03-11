@@ -193,7 +193,7 @@ with col2:
                 x=alt.X("Living Situation:N", title="Living Situation", axis=alt.Axis(labelAngle=0)),
                 y=alt.Y("percentage:Q", title="Percentage of students"),
                 color=alt.Color("Eating Out Frequency:N", legend=alt.Legend(title="Eating Out Frequency")),
-                column=alt.Column("Eating Out Frequency:N", title=None, spacing=10, width=30),  # optionnel, pour séparer par catégorie
+                column=alt.Column("Eating Out Frequency:N", title=None, spacing=10),  # optionnel, pour séparer par catégorie
                 tooltip=[
                     alt.Tooltip("Living Situation:N"),
                     alt.Tooltip("Eating Out Frequency:N"),
@@ -204,7 +204,7 @@ with col2:
                 width=30,
                 height=400
             )
-            st.altair_chart(chart_eat_out, use_container_width=True)
+            st.altair_chart(chart_eat_out)
             st.write("Students who live off campus or have long commutes tend to eat out more frequently, while those on campus eat out less. This shows that time availability and commuting heavily influence eating-out habits.")
         elif choice == "Workload":
             st.header("Academic stress")
