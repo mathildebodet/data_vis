@@ -18,32 +18,49 @@ st.set_page_config(
 
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
-    col3, col4 = st.columns([0.7, 0.3])
+
+    col3, col4 = st.columns([3, 1])  # 3:1 pour que le pie soit plus large
+
+    labels = ["Budget", "Time", "Workload"]
+    values = [20, 35, 45]  # valeurs proportionnelles
+
+    pie_df = pd.DataFrame({
+        "constraint": labels,
+        "value": values
+    })
+    pie_df["value"] = pie_df["value"].astype(float)
+
     with col3:
-        labels = ["Budget", "Time", "Workload"]
-        values = [20, 35, 45]  # valeurs proportionnelles
-
-        # dataframe propre, forcer float
-        pie_df = pd.DataFrame({
-            "constraint": labels,
-            "value": values
-        })
-        pie_df["value"] = pie_df["value"].astype(float)
-
-        # pie chart
+        st.write("Click on a constraint to explore how it shapes student eating habits.")
+        
+        # Pie chart
         fig = px.pie(
             pie_df,
             names="constraint",
-            values="value"
+            values="value",
         )
 
+        fig.update_traces(
+            textinfo="label",
+            textposition="inside",
+            marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]),
+            hoverinfo="skip",
+            hovertemplate=None
+        )
 
-        fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
-        fig.update_layout(showlegend=False, autosize=True)
+        fig.update_layout(
+            showlegend=False,
+            autosize=False,
+            width=300,   # largeur forcée
+            height=300   # hauteur forcée pour être carré
+        )
 
         selected = plotly_events(fig, click_event=True)
+        st.plotly_chart(fig, use_container_width=False)  # garder la taille définie
+
     with col4:
-        st.image("fourchette.png", width=50)
+        st.write("")  # espace pour aligner verticalement
+        st.image("fourchette.png", width=150)  # ajuster width pour la faire à la même hauteur que le pie
 
 
 with col2:
