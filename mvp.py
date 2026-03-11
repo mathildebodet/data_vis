@@ -55,11 +55,11 @@ with col1:
         )
 
         selected = plotly_events(fig, click_event=True)
-        st.plotly_chart(fig, use_container_width=False)  # garder la taille définie
 
     with col4:
         st.write("")  # espace pour aligner verticalement
-        st.image("fourchette.png", width=150)  # ajuster width pour la faire à la même hauteur que le pie
+        st.write("\n\n\n")
+        st.image("fourchette.png", width=100)  # ajuster width pour la faire à la même hauteur que le pie
 
 
 with col2:
