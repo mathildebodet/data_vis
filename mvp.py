@@ -105,7 +105,7 @@ with col2:
                     "Vegetable Eating Likelihood:N",
                     title="Veggie Eating Likelihood",
                     sort=["unlikely", "neutral", "likely"],
-                    scale=alt.Scale(range=["#FF9999", "#FFC966", "#66B2FF"])
+                    scale=alt.Scale(scheme=alt.Scheme("pastel1"))
                 ),
                 tooltip=[
                     alt.Tooltip("Income Group:N", title="Income Group"),
@@ -147,7 +147,7 @@ with col2:
                     "Healthy Feeling Group:N",
                     title="Diet Health Perception",
                     sort=["Unhealthy", "Moderately healthy", "Healthy"],
-                    scale=alt.Scale(range=["#FF6666", "#FFCC66", "#66B2FF"])
+                    scale=alt.Scale(scheme=alt.Scheme("pastel1"))
                 ),
                 tooltip=[
                     alt.Tooltip("Employment Status:N", title="Employment Status"),
