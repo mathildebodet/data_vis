@@ -8,7 +8,7 @@ import altair as alt
 df = pd.read_csv("food_preprocessed.csv")
 
 st.title("What Shapes Student Eating Habits?")
-col1, col2 = st.columns([0.4, 0.6])
+col1, col2 = st.columns([0.3, 0.7], gap="large")
 
 st.set_page_config(
     page_title="Student Eating Habits",
