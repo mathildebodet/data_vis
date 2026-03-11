@@ -31,7 +31,6 @@ with col1:
     pie_df["value"] = pie_df["value"].astype(float)
 
     with col3:
-        st.write("Click on a constraint to explore how it shapes student eating habits.")
         
         # Pie chart
         fig = px.pie(
@@ -51,8 +50,8 @@ with col1:
         fig.update_layout(
             showlegend=False,
             autosize=False,
-            width=300,   # largeur forcée
-            height=300   # hauteur forcée pour être carré
+            width=400,   # largeur forcée
+            height=400   # hauteur forcée pour être carré
         )
 
         selected = plotly_events(fig, click_event=True)
