@@ -63,7 +63,6 @@ with col1:
         st.write("")
         st.write("")
         st.write("")
-        st.write("")
         st.image("fourchette.png", width=100)  # ajuster width pour la faire à la même hauteur que le pie
 
 
