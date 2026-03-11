@@ -8,7 +8,7 @@ import altair as alt
 df = pd.read_csv("food_preprocessed.csv")
 
 st.title("What Shapes Student Eating Habits?")
-col1, col2 = st.columns([0.5, 0.5])
+col1, col2 = st.columns([0.3, 0.7])
 
 st.set_page_config(
     page_title="Student Eating Habits",
@@ -18,28 +18,32 @@ st.set_page_config(
 
 with col1:
     st.write("Click on a constraint to explore how it shapes student eating habits.")
-    labels = ["Budget", "Time", "Workload"]
-    values = [20, 35, 45]  # valeurs proportionnelles
+    col3, col4 = st.columns(2)
+    with col3:
+        labels = ["Budget", "Time", "Workload"]
+        values = [20, 35, 45]  # valeurs proportionnelles
 
-    # dataframe propre, forcer float
-    pie_df = pd.DataFrame({
-        "constraint": labels,
-        "value": values
-    })
-    pie_df["value"] = pie_df["value"].astype(float)
+        # dataframe propre, forcer float
+        pie_df = pd.DataFrame({
+            "constraint": labels,
+            "value": values
+        })
+        pie_df["value"] = pie_df["value"].astype(float)
 
-    # pie chart
-    fig = px.pie(
-        pie_df,
-        names="constraint",
-        values="value"
-    )
+        # pie chart
+        fig = px.pie(
+            pie_df,
+            names="constraint",
+            values="value"
+        )
 
 
-    fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
-    fig.update_layout(showlegend=False, autosize=True)
+        fig.update_traces(textinfo="label", textposition="inside", marker=dict(colors=["#FF9999", "#66B2FF", "#99FF99"]), hoverinfo = "skip", hovertemplate = None)
+        fig.update_layout(showlegend=False, autosize=True)
 
-    selected = plotly_events(fig, click_event=True)
+        selected = plotly_events(fig, click_event=True)
+    with col4:
+        st.image("fourchette.png", use_column_width=True)
 
 
 with col2:
@@ -54,8 +58,6 @@ with col2:
 
         if choice == "Budget":
             st.header("Budget and diet")
-            st.write("One might expect income to strongly influence vegetable consumption. However, the distribution across income groups is relatively balanced. Even students with little or no income report similar or higher vegetable consumption, suggesting that income alone may not strongly determine this aspect of students’ diets.")
-
             grouped = (
                 df.groupby(["Income Group", "Vegetable Eating Likelihood"])
                 .size()
@@ -95,9 +97,9 @@ with col2:
             )
 
             st.altair_chart(chart_veg, use_container_width=True)
+            st.write("One might expect income to strongly influence vegetable consumption. However, the distribution across income groups is relatively balanced. Even students with little or no income report similar or higher vegetable consumption, suggesting that income alone may not strongly determine this aspect of students’ diets.")
 
-            st.write("This chart explores whether students with different financial situations perceive their diet differently. Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show relatively similar perceptions of diet healthiness across groups, suggesting that financial differences alone may not strongly influence how healthy students feel their diet is.")
-            # Créer tableau de pourcentages pour le graphique
+
             health_dist = (
                 df.groupby(["Employment Status", "Healthy Feeling Group"])
                 .size()
@@ -137,6 +139,8 @@ with col2:
             )
 
             st.altair_chart(chart_health, use_container_width=True)
+            st.write("This chart explores whether students with different financial situations perceive their diet differently. Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show relatively similar perceptions of diet healthiness across groups, suggesting that financial differences alone may not strongly influence how healthy students feel their diet is.")
+            
 
         elif choice == "Time":
             st.header("Time constraints")
