@@ -50,8 +50,8 @@ with col1:
         fig.update_layout(
             showlegend=False,
             autosize=False,
-            width=300,   # largeur forcée
-            height=300   # hauteur forcée pour être carré
+            width=330,   # largeur forcée
+            height=330   # hauteur forcée pour être carré
         )
 
         selected = plotly_events(fig, click_event=True)
