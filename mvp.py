@@ -5,7 +5,7 @@ import plotly.express as px
 from streamlit_plotly_events import plotly_events
 import altair as alt
 
-df = pd.read_csv("food_coded_2.csv")
+df = pd.read_csv("food_preprocessed.csv")
 
 st.title("What Shapes Student Eating Habits?")
 col1, col2 = st.columns([0.5, 0.5])
@@ -56,126 +56,87 @@ with col2:
             st.header("Budget and diet")
             st.write("One might expect income to strongly influence vegetable consumption. However, the distribution across income groups is relatively balanced. Even students with little or no income report similar or higher vegetable consumption, suggesting that income alone may not strongly determine this aspect of students’ diets.")
 
-            mapping_income = {
-            1: "less than $15,000",
-            2: "$15,001 to $30,000",
-            3: "$30,001 to $50,000",
-            4: "$50,001 to $70,000",
-            5: "$70,001 to $100,000",
-            6: "higher than $100,000"
-        }
-
-            mapping_veg = {
-                1: "very unlikely",
-                2: "unlikely",
-                3: "neutral",
-                4: "likely",
-                5: "very likely"
-            }
-
-            data_short = df[["income", "veggies_day"]].copy()
-
-            data_short["income"] = data_short["income"].map(mapping_income)
-            data_short["veggies_day"] = data_short["veggies_day"].map(mapping_veg)
-
-            # regrouper very likely / very unlikely
-            data_short.loc[data_short["veggies_day"] == "very likely", "veggies_day"] = "likely"
-            data_short.loc[data_short["veggies_day"] == "very unlikely", "veggies_day"] = "unlikely"
-
-
-            # --- regroupement income ---
-            def income_group(x):
-                if x == "less than $15,000":
-                    return "No income"
-                elif x in ["$15,001 to $30,000", "$30,001 to $50,000"]:
-                    return "Low income (less than $50,000 a year)"
-                else:
-                    return "High income"
-
-            data_short["income_group"] = data_short["income"].apply(income_group)
-
-
-            # --- calcul pourcentage ---
             grouped = (
-                data_short
-                .groupby(["income_group", "veggies_day"])
+                df.groupby(["Income Group", "Vegetable Eating Likelihood"])
                 .size()
                 .reset_index(name="count")
             )
 
-            grouped["percentage"] = grouped.groupby("income_group")["count"].transform(lambda x: x / x.sum() * 100)
-
-
-            # --- graphique Altair ---
-            chart = alt.Chart(grouped).mark_bar().encode(
-                x=alt.X("income_group:N", title="Income category",sort=["No income", "Low income (less than $50,000 a year)", "High income"],axis=alt.Axis(labelAngle=0)),
-                y=alt.Y("percentage:Q", title="Percentage of students"),
-                xOffset="veggies_day:N",
-                color=alt.Color("veggies_day:N", title="Vegetable consumption likelihood",sort=["unlikely", "neutral", "likely"]),
-                tooltip=["income_group", "veggies_day", "percentage"],
-            ).properties(
-                title="Income vs Likelihood of Eating Vegetables Daily",
-                width=600,
+            grouped["percentage"] = (
+                grouped.groupby("Income Group")["count"]
+                .transform(lambda x: x / x.sum() * 100)
             )
-            st.altair_chart(chart, use_container_width=True)
+
+            # Graphique Altair
+            chart_veg = alt.Chart(grouped).mark_bar(size=30).encode(
+                x=alt.X(
+                    "Income Group:N",
+                    title="Income category",
+                    axis=alt.Axis(labelAngle=0, labelFontSize=12)
+                ),
+                y=alt.Y(
+                    "percentage:Q",
+                    title="Percentage of students"
+                ),
+                xOffset="Vegetable Eating Likelihood:N",
+                color=alt.Color(
+                    "Vegetable Eating Likelihood:N",
+                    title="Veggie Eating Likelihood",
+                    sort=["unlikely", "neutral", "likely"],
+                    scale=alt.Scale(range=["#FF9999", "#FFC966", "#66B2FF"])
+                ),
+                tooltip=[
+                    alt.Tooltip("Income Group:N", title="Income Group"),
+                    alt.Tooltip("Vegetable Eating Likelihood:N", title="Veggie Eating Likelihood"),
+                    alt.Tooltip("percentage:Q", title="Percentage", format=".1f")
+                ]
+            ).properties(
+                title="Income vs Vegetable Eating Likelihood"
+            )
+
+            st.altair_chart(chart_veg, use_container_width=True)
 
             st.write("This chart explores whether students with different financial situations perceive their diet differently. Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show relatively similar perceptions of diet healthiness across groups, suggesting that financial differences alone may not strongly influence how healthy students feel their diet is.")
-            df["employment_status"] = df["employment"].map({
-                1: "Part-time employed",
-                2: "Part-time employed",
-                3: "Unemployed"
-            })
-
-
-            def healthy_group(x):
-                if x <= 4:
-                    return "Unhealthy"
-                elif x <= 7:
-                    return "Moderately healthy"
-                else:
-                    return "Healthy"
-
-
-            df["healthy_group"] = df["healthy_feeling"].apply(healthy_group)
-            print(df[["healthy_feeling", "healthy_group"]].head())
+            # Créer tableau de pourcentages pour le graphique
             health_dist = (
-                df.groupby(["employment_status", "healthy_group"])
+                df.groupby(["Employment Status", "Healthy Feeling Group"])
                 .size()
                 .reset_index(name="count")
             )
 
             health_dist["percentage"] = (
-                health_dist.groupby("employment_status")["count"]
+                health_dist.groupby("Employment Status")["count"]
                 .transform(lambda x: x / x.sum() * 100)
             )
 
-            import altair as alt
-
-            chart = alt.Chart(health_dist).mark_bar(size=30).encode(
-
+            # Graphique Altair
+            chart_health = alt.Chart(health_dist).mark_bar(size=30).encode(
                 x=alt.X(
-                    "employment_status:N",
+                    "Employment Status:N",
                     title="Employment status",
-                    axis=alt.Axis(labelAngle=0)
+                    axis=alt.Axis(labelAngle=0, labelFontSize=12)
                 ),
-
                 y=alt.Y(
                     "percentage:Q",
                     title="Percentage of students"
                 ),
-
-                xOffset="healthy_group:N",
-
+                xOffset="Healthy Feeling Group:N",
                 color=alt.Color(
-                    "healthy_group:N",
-                    title="Perceived diet healthiness",
-                    sort=["Unhealthy", "Moderately healthy", "Healthy"]
-                )
-
+                    "Healthy Feeling Group:N",
+                    title="Diet Health Perception",
+                    sort=["Unhealthy", "Moderately healthy", "Healthy"],
+                    scale=alt.Scale(range=["#FF6666", "#FFCC66", "#66B2FF"])
+                ),
+                tooltip=[
+                    alt.Tooltip("Employment Status:N", title="Employment Status"),
+                    alt.Tooltip("Healthy Feeling Group:N", title="Diet Health Perception"),
+                    alt.Tooltip("percentage:Q", title="Percentage", format=".1f")
+                ]
             ).properties(
-                title="Perceived Diet Healthiness by Employment Status",
-                width=300
+                title="Perceived Diet Healthiness by Employment Status"
             )
+
+            st.altair_chart(chart_health, use_container_width=True)
 
         elif choice == "Time":
             st.header("Time constraints")
