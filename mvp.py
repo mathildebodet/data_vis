@@ -159,16 +159,53 @@ with col2:
             )
 
             st.altair_chart(chart_health, use_container_width=True)
-            st.write("This chart explores whether students with different financial situations perceive their diet differently. Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show relatively similar perceptions of diet healthiness across groups, suggesting that financial differences alone may not strongly influence how healthy students feel their diet is.")
+            st.write("This chart explores whether students with different financial situations perceive their diet differently. Employment status can partially reflect access to financial resources, as students with part-time jobs may have more money to spend on food. However, the results show that unemployed students report similar or even higher perceptions of healthy eating compared to those with part-time jobs. This suggests that financial constraints may not be the primary factor influencing how students eat.")
             
 
         elif choice == "Time":
             st.header("Time constraints")
+            cook_dist = df["Cook Frequency"].value_counts(normalize=True).reset_index()
+            cook_dist.columns = ["Cook Frequency", "Proportion"]
+            cook_dist["Proportion"] *= 100
 
-            fig, ax = plt.subplots()
-            df["cook"].value_counts().plot(kind="bar", ax=ax)
-            st.pyplot(fig)
+            chart_cook = alt.Chart(cook_dist).mark_arc(innerRadius=50).encode(
+                theta=alt.Theta("Proportion:Q", title=""),
+                color=alt.Color("Cook Frequency:N", scale=alt.Scale(scheme="pastel1")),
+                tooltip=["Cook Frequency:N", alt.Tooltip("Proportion:Q", format=".1f")]
+            ).properties(
+                title="Cooking Frequency among Students"
+            )
+            st.altair_chart(chart_cook, use_container_width=True)
+            st.write("Many students report that they would like to cook more often, but in reality, they mostly cook only whenever they can, indicating that time constraints strongly limit their ability to prepare meals at home.")
 
+            eat_out_dist = (
+            df.groupby(["Living Situation", "Eating Out Frequency"])
+                .size()
+                .reset_index(name="count")
+            )
+            eat_out_dist["percentage"] = (
+                eat_out_dist.groupby("Living Situation")["count"]
+                .transform(lambda x: x / x.sum() * 100)
+            )
+
+            # --- Grouped bar chart ---
+            chart_eat_out = alt.Chart(eat_out_dist).mark_bar().encode(
+                x=alt.X("Living Situation:N", title="Living Situation", axis=alt.Axis(labelAngle=0)),
+                y=alt.Y("percentage:Q", title="Percentage of students"),
+                color=alt.Color("Eating Out Frequency:N", legend=alt.Legend(title="Eating Out Frequency")),
+                column=alt.Column("Eating Out Frequency:N", title=None, spacing=10),  # optionnel, pour séparer par catégorie
+                tooltip=[
+                    alt.Tooltip("Living Situation:N"),
+                    alt.Tooltip("Eating Out Frequency:N"),
+                    alt.Tooltip("percentage:Q", format=".1f")
+                ]
+            ).properties(
+                title="Eating Out Frequency by Living Situation",
+                width=150,
+                height=400
+            )
+            st.altair_chart(chart_eat_out, use_container_width=True)
+            st.write("Students who live off campus or have long commutes tend to eat out more frequently, while those on campus eat out less. This shows that time availability and commuting heavily influence eating-out habits.")
         elif choice == "Workload":
             st.header("Academic stress")
 
