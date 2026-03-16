@@ -20,6 +20,15 @@ fourchette = remove_white_background("fourchette.png")
 df = pd.read_csv("food_preprocessed.csv")
 
 st.title("What Shapes Student Eating Habits?")
+
+st.markdown("""
+    <style>
+    img {
+        filter: invert(1);
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 col1, col2 = st.columns([0.3, 0.7], gap="medium")
 
 st.set_page_config(
