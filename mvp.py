@@ -4,6 +4,18 @@ import matplotlib.pyplot as plt
 import plotly.express as px
 from streamlit_plotly_events import plotly_events
 import altair as alt
+from PIL import Image
+import numpy as np
+
+def remove_white_background(image_path, threshold=240):
+    img = Image.open(image_path).convert("RGBA")
+    data = np.array(img)
+    r, g, b, a = data[:,:,0], data[:,:,1], data[:,:,2], data[:,:,3]
+    white_mask = (r > threshold) & (g > threshold) & (b > threshold)
+    data[:,:,3] = np.where(white_mask, 0, a)
+    return Image.fromarray(data)
+
+fourchette = remove_white_background("fourchette.png")
 
 df = pd.read_csv("food_preprocessed.csv")
 
@@ -48,13 +60,16 @@ with col1:
         )
 
         fig.update_layout(
-            showlegend=False,
-            autosize=False,
-            width=330,   # largeur forcée
-            height=330   # hauteur forcée pour être carré
-        )
+        showlegend=False,
+        autosize=True,
+        width=None,
+        height=330,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(t=20, b=20, l=20, r=20)
+    )
 
-        selected = plotly_events(fig, click_event=True)
+        selected = plotly_events(fig, click_event=True, override_height=330)
 
     with col4:
         st.write("")  # espace pour aligner verticalement
@@ -63,7 +78,7 @@ with col1:
         st.write("")
         st.write("")
         st.write("")
-        st.image("fourchette.png", width=100)  # ajuster width pour la faire à la même hauteur que le pie
+        st.image(fourchette, width=100)  # ajuster width pour la faire à la même hauteur que le pie
 
 
 with col2:
